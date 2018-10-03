@@ -14,7 +14,7 @@ y%: data/IC%.csv data/IC%_Dict.csv data/IC%_AY.csv data/IC%_AY_Dict.csv data/EFF
 
 py%: data/FLAGS%.csv data/FLAGS%_Dict.csv ;
 
-ay%: data/SFA%.csv data/SFA%_Dict.csv ;
+ay%: data/SFA%.csv data/SFA%_Dict.csv data/F%_F1A.csv data/F%_F1A_Dict.csv data/F%_F2.csv data/F%_F2_Dict.csv data/F%_F3.csv data/F%_F3_Dict.csv ;
 
 data/%.zip:
 	wget https://nces.ed.gov/ipeds/datacenter/$@ --quiet -O $@
