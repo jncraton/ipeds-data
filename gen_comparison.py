@@ -67,7 +67,7 @@ with open('data/comparison-private-non-profit.tsv', 'w') as f:
     if s['CONTROL'] == '2':
       writer.writerow(s)
 
-with open('data/comparison-ny-pa-21.tsv', 'w') as f:
+with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
