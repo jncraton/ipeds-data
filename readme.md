@@ -5,7 +5,7 @@ IPEDS Data
 
 The output data files are available here:
 
-https://ipeds-data.netlify.com
+https://ipeds-data.netlify.com/data
 
 Data files are downloaded from the following flow:
 
