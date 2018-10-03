@@ -2,7 +2,10 @@
 
 .SECONDARY: 
 
-all: data/index.html
+all: data/index.html data/comparison.tsv
+
+data/comparison.tsv: data/index.html
+	python3 gen_comparison.py
 
 data/index.html: y2017 y2016 y2015 y2014 y2013 y2012 y2011 y2010 y2009 y2008 y2007 y2006 y2005 ay1516 ay1415 ay1314 ay1213 ay1112 ay1011 ay0910 ay0809 ay0708 ay0607 ay0506 py2016 py2015 py2014 py2013 py2012 py2011 py2010 py2009 py2008 py2007 py2006 py2005
 	cd data && python3 ../list_dir.py > index.html
