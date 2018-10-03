@@ -10,14 +10,17 @@ columns = [
 
 schools = {}
 
-final_columns = ['INSTNM','UNITID','CONTROL']
+final_columns = ['INSTNM','UNITID','C15BASIC','CONTROL','STABBR','ZIP']
 
 for y in [2000 + i for i in range(10,18)]:
   with open('data/hd%s.csv' % y, encoding = 'cp1252') as f:
     for r in csv.DictReader(f):
       schools[r['UNITID']] = {}
       for c in final_columns:
-        schools[r['UNITID']][c] = r[c]
+        try:
+          schools[r['UNITID']][c] = r[c]
+        except KeyError:
+          pass
 
 for c in columns:
   for y in [2000 + i for i in range(10,18)]:
