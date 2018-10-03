@@ -71,7 +71,7 @@ with open('data/comparison-ny-pa-21.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    BAC_AS = 21
-    BAC_DIV = 22
+    BAC_AS = '21'
+    BAC_DIV = '22'
     if s['CONTROL'] == '2' and s['C15BASIC'] in [BAC_AS,BAC_DIV] and s['STABBR'] in ['NY','PA']:
       writer.writerow(s)
