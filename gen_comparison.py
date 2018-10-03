@@ -3,18 +3,21 @@ import csv
 columns = [
   ('SCUGRAD','sfa{ay}.csv','Total Undergraduates'),
   ('SCUGFFN','sfa{ay}.csv','Total First-time, First-year Undergraduates'),
+  ('UAGRNTA','sfa{ay}.csv','Average Total Aid'),
+  ('UPGRNTA','sfa{ay}.csv','Average Pell Grant Aid'),
+  ('IGRNT_A','sfa{ay}.csv','Average Institutional Grant Aid'),
 ]
 
 schools = {}
+
+final_columns = ['INSTNM','UNITID','CONTROL']
 
 for y in [2000 + i for i in range(10,18)]:
   with open('data/hd%s.csv' % y, encoding = 'cp1252') as f:
     for r in csv.DictReader(f):
       schools[r['UNITID']] = {}
-      schools[r['UNITID']]['INSTNM'] = r['INSTNM']
-      schools[r['UNITID']]['UNITID'] = r['UNITID']
-
-final_columns = ['INSTNM','UNITID']
+      for c in final_columns:
+        schools[r['UNITID']][c] = r[c]
 
 for c in columns:
   for y in [2000 + i for i in range(10,18)]:
