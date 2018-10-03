@@ -2,7 +2,7 @@
 
 .SECONDARY: 
 
-all: data/index.html data/comparison.tsv
+all: data/index.html
 
 data/index.html: data/comparison.tsv
 	cd data && python3 ../list_dir.py > index.html
