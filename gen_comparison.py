@@ -20,7 +20,7 @@ for y in [2000 + i for i in range(10,18)]:
         try:
           schools[r['UNITID']][c] = r[c]
         except KeyError:
-          pass
+          schools[r['UNITID']][c] = ''
 
 for c in columns:
   for y in [2000 + i for i in range(10,18)]:
@@ -65,4 +65,11 @@ with open('data/comparison-private-non-profit.tsv', 'w') as f:
   writer.writeheader()
   for s in schools.values():
     if s['CONTROL'] == '2':
+      writer.writerow(s)
+
+with open('data/comparison-ny-pa-21.tsv', 'w') as f:
+  writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
+  writer.writeheader()
+  for s in schools.values():
+    if s['CONTROL'] == '2' and s['C15BASIC'] == '21' and s['STABBR'] in ['NY','PA']:
       writer.writerow(s)
