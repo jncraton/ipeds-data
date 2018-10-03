@@ -49,3 +49,11 @@ with open('data/comparison.tsv', 'w') as f:
   writer.writeheader()
   for s in schools.values():
     writer.writerow(s)
+
+with open('data/comparison-private.tsv', 'w') as f:
+  writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
+  writer.writeheader()
+  for s in schools.values():
+    print(s['CONTROL'])
+    if s['CONTROL'] == '2':
+      writer.writerow(s)
