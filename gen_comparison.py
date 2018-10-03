@@ -50,10 +50,16 @@ with open('data/comparison.tsv', 'w') as f:
   for s in schools.values():
     writer.writerow(s)
 
-with open('data/comparison-private.tsv', 'w') as f:
+with open('data/comparison-public.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    print(s['CONTROL'])
+    if s['CONTROL'] == '1':
+      writer.writerow(s)
+
+with open('data/comparison-private-non-profit.tsv', 'w') as f:
+  writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
+  writer.writeheader()
+  for s in schools.values():
     if s['CONTROL'] == '2':
       writer.writerow(s)
