@@ -10,4 +10,4 @@ dist:
 install:
     - pip3 install -r requirements.txt
 script:
-    - make
+    - make -j
