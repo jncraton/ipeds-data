@@ -1,0 +1,13 @@
+language: python
+python:
+    - 3.5
+    - 3.6
+    - 3.7
+os:
+    - linux
+dist:
+    - xenial
+install:
+    - pip3 install -r requirements.txt
+script:
+    - make
