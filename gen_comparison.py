@@ -7,8 +7,8 @@ columns = [
   ('CONTROL','hd2016.csv','Public/Non-profit/For-profit'),
   ('STABBR','hd2016.csv','State'),
   ('ZIP','hd2016.csv','Zip Code'),
-  ('SCUGRAD','sfa{ay}.csv','Total Undergraduates'),
-  ('EFYTOTLT','effy{y}.csv','Total Unduplicated Headcount'),
+  ('FTEUG','efia{y}.csv','Undergraduate FTE'),
+  ('FTEGD','efia{y}.csv','Graduate FTE'),
   ('SCUGFFN','sfa{ay}.csv','Total First-time, First-year Undergraduates'),
   ('UAGRNTA','sfa{ay}.csv','Average Total Aid'),
   ('UPGRNTA','sfa{ay}.csv','Average Pell Grant Aid'),
@@ -49,16 +49,23 @@ for y in years:
 
 def append_column(filename, in_col, out_col):
   print(out_col)
-  with open('data/' + filename, encoding = 'cp1252') as f:
-    for r in csv.DictReader(f):
+
+  try:
+    f = open('data/' + filename.replace('.csv','_rv.csv'), encoding = 'cp1252')
+  except:
+    f = open('data/' + filename, encoding = 'cp1252')
+
+  for r in csv.DictReader(f):
+    try:
+      schools[r['UNITID']][out_col] = r[in_col]
+    except KeyError:
       try:
-        schools[r['UNITID']][out_col] = r[in_col]
+        schools[r['UNITID']][out_col] = ''
       except KeyError:
-        try:
-          schools[r['UNITID']][out_col] = ''
-        except KeyError:
-          # School didn't exist in imported list
-          pass
+        # School didn't exist in imported list
+        pass
+
+  f.close()
 
 args = []
 
