@@ -3,4 +3,4 @@
 [build]
   base    = ""
   publish = "."
-command = "make -j"
+command = "make -j 32"
