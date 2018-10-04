@@ -21,6 +21,8 @@ data/%.zip:
 
 data/%.csv: data/%.zip
 	unzip $< -d data
+	# Remove byte order mark
+	-LANG=C LC_ALL=C sed -e 's/\r$$// ; 1 s/^\xef\xbb\xbf//' -i -- $(shell echo $@ | tr A-Z a-z)
 	rm $<
 
 clean:
