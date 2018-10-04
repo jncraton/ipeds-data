@@ -28,7 +28,7 @@ schools = {}
 
 final_columns = ['INSTNM','UNITID','C15BASIC','CONTROL','STABBR','ZIP']
 
-for y in [2000 + i for i in range(10,18)]:
+for y in [2000 + i for i in range(10,17)]:
   with open('data/hd%s.csv' % y, encoding = 'cp1252') as f:
     for r in csv.DictReader(f):
       schools[r['UNITID']] = {}
@@ -55,10 +55,10 @@ def append_column(filename, col, ver, desc):
 
 for c in columns:
   if '{y}' in c[1]:
-    for y in [2000 + i for i in range(10,18)]:
+    for y in [2000 + i for i in range(10,17)]:
       append_column(c[1].replace('{y}',y),c[0],y,c[2])
   elif '{ay}' in c[1]:
-    for ay in ['0708', '0809', '0910', '1011', '1112', '1213', '1314', '1415', '1516']:
+    for ay in ['0506', '0607', '0708', '0809', '0910', '1011', '1112', '1213', '1314', '1415', '1516']:
       append_column(c[1].replace('{ay}',ay),c[0],ay,c[2])
   else:
     append_column(c[1],c[0],'latest',c[2])
