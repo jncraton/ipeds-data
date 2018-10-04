@@ -10,8 +10,8 @@ for f in csvs:
   print(lf)
   
   content = ''
-  with open(f,'r',encoding='cp1252') as fr:
+  with open(lf,'r',encoding='cp1252') as fr:
     content = fr.read()
 
-  with open(f,'w',encoding='cp1252') as fw:
+  with open(lf,'w',encoding='cp1252') as fw:
     fw.write(content.upper())
