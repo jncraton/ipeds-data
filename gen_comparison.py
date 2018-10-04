@@ -1,7 +1,4 @@
 import csv
-from multiprocessing import Pool
-
-p = Pool()
 
 columns = [
   ('INSTNM','hd2016.csv','Name'),
@@ -63,24 +60,27 @@ def append_column(filename, in_col, out_col):
           # School didn't exist in imported list
           pass
 
-calls = []
+args = []
 
 for c in columns:
   if '{y}' in c[1]:
     for y in years:
       name = "%s %s (%s)" % (c[0], y, c[2])
-      calls.append((c[1].replace('{y}',y),c[0],name))
+      args.append((c[1].replace('{y}',y),c[0],name))
+      final_columns.append(name)
   elif '{ay}' in c[1]:
     for ay in academic_years:
       name = "%s %s (%s)" % (c[0], ay, c[2])
-      calls.append((c[1].replace('{ay}',ay),c[0],name))
+      args.append((c[1].replace('{ay}',ay),c[0],name))
+      final_columns.append(name)
   else:
     name = "%s latest (%s)" % (c[0], c[2])
-    calls.append((c[1],c[0],name))
+    args.append((c[1],c[0],name))
+    final_columns.append(name)
+    
 
-  final_columns.append(name)
-
-p.starmap(append_column, calls)
+for a in args:
+  append_column(*a)
 
 with open('data/comparison.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
@@ -92,14 +92,15 @@ with open('data/comparison-public.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '1':
+    print(s.keys())
+    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '1':
       writer.writerow(s)
 
 with open('data/comparison-private-non-profit.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '2':
+    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2':
       writer.writerow(s)
 
 with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
@@ -109,5 +110,5 @@ with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
     MA = ['18','19','20']
     BAC_AS = '21'
     BAC_DIV = '22'
-    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '2' and s['C15BASIC latests (Carnegie Classification)'] in MA+[BAC_AS,BAC_DIV] and s['STABBR latest (State)'] in ['NY','PA']:
+    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2' and s.get('C15BASIC latest (Carnegie Classification)') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR latest (State)') in ['NY','PA']:
       writer.writerow(s)
