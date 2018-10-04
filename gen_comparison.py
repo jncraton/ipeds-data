@@ -1,7 +1,17 @@
 import csv
+from multiprocessing import Pool
+
+p = Pool()
 
 columns = [
+  ('INSTNM','hd2016.csv','Name'),
+  ('UNITID','hd2016.csv','ID'),
+  ('C15BASIC','hd2016.csv','Carnegie Classification'),
+  ('CONTROL','hd2016.csv','Public/Non-profit/For-profit'),
+  ('STABBR','hd2016.csv','State'),
+  ('ZIP','hd2016.csv','Zip Code'),
   ('SCUGRAD','sfa{ay}.csv','Total Undergraduates'),
+  ('EFYTOTLT','effy{y}.csv','Total Unduplicated Headcount'),
   ('SCUGFFN','sfa{ay}.csv','Total First-time, First-year Undergraduates'),
   ('UAGRNTA','sfa{ay}.csv','Average Total Aid'),
   ('UPGRNTA','sfa{ay}.csv','Average Pell Grant Aid'),
@@ -24,44 +34,53 @@ columns = [
   ('F2D16','f{ay}_f2.csv','Total Revenue and Investment return'),
 ]
 
+years = [str(2000 + i) for i in range(5,17)]
+academic_years = ['0506', '0607', '0708', '0809', '0910', '1011', '1112', '1213', '1314', '1415', '1516']
+
 schools = {}
 
-final_columns = ['INSTNM','UNITID','C15BASIC','CONTROL','STABBR','ZIP']
+final_columns = []
 
-for y in [2000 + i for i in range(10,17)]:
+# Create all school dicts
+for y in years:
   with open('data/hd%s.csv' % y, encoding = 'cp1252') as f:
     for r in csv.DictReader(f):
-      schools[r['UNITID']] = {}
-      for c in final_columns:
-        try:
-          schools[r['UNITID']][c] = r[c]
-        except KeyError:
-          schools[r['UNITID']][c] = ''
+      try:
+        schools[r['UNITID']] = {}
+      except:
+        schools[r['unitid']] = {}
 
-def append_column(filename, col, ver, desc):
-  name = "%s %s (%s)" % (col, ver, desc)
-  print(name)
-  final_columns.append(name)
+def append_column(filename, in_col, out_col):
+  print(out_col)
   with open('data/' + filename, encoding = 'cp1252') as f:
     for r in csv.DictReader(f):
       try:
-        schools[r['UNITID']][name] = r[col]
+        schools[r['UNITID']][out_col] = r[in_col]
       except KeyError:
         try:
-          schools[r['UNITID']][name] = ''
+          schools[r['UNITID']][out_col] = ''
         except KeyError:
           # School didn't exist in imported list
           pass
 
+calls = []
+
 for c in columns:
   if '{y}' in c[1]:
-    for y in [2000 + i for i in range(10,17)]:
-      append_column(c[1].replace('{y}',y),c[0],y,c[2])
+    for y in years:
+      name = "%s %s (%s)" % (c[0], y, c[2])
+      calls.append((c[1].replace('{y}',y),c[0],name))
   elif '{ay}' in c[1]:
-    for ay in ['0506', '0607', '0708', '0809', '0910', '1011', '1112', '1213', '1314', '1415', '1516']:
-      append_column(c[1].replace('{ay}',ay),c[0],ay,c[2])
+    for ay in academic_years:
+      name = "%s %s (%s)" % (c[0], ay, c[2])
+      calls.append((c[1].replace('{ay}',ay),c[0],name))
   else:
-    append_column(c[1],c[0],'latest',c[2])
+    name = "%s latest (%s)" % (c[0], c[2])
+    calls.append((c[1],c[0],name))
+
+  final_columns.append(name)
+
+p.starmap(append_column, calls)
 
 with open('data/comparison.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
@@ -73,14 +92,14 @@ with open('data/comparison-public.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s['CONTROL'] == '1':
+    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '1':
       writer.writerow(s)
 
 with open('data/comparison-private-non-profit.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s['CONTROL'] == '2':
+    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '2':
       writer.writerow(s)
 
 with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
@@ -90,5 +109,5 @@ with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
     MA = ['18','19','20']
     BAC_AS = '21'
     BAC_DIV = '22'
-    if s['CONTROL'] == '2' and s['C15BASIC'] in MA+[BAC_AS,BAC_DIV] and s['STABBR'] in ['NY','PA']:
+    if s['CONTROL latest (Public/Non-profit/For-profit)'] == '2' and s['C15BASIC latests (Carnegie Classification)'] in MA+[BAC_AS,BAC_DIV] and s['STABBR latest (State)'] in ['NY','PA']:
       writer.writerow(s)
