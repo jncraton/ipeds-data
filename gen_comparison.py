@@ -92,7 +92,6 @@ with open('data/comparison-public.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    print(s.keys())
     if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '1':
       writer.writerow(s)
 
