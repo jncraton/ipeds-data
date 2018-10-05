@@ -47,23 +47,31 @@ for y in years:
       except:
         schools[r['unitid']] = {}
 
-def append_column(filename, in_col, out_col):
+def append_column(filename, col, by=None):
+  out_col = col if not by else col + '-' + by
   print(out_col)
+  final_columns.append(out_col)
 
   try:
     f = open('data/' + filename.replace('.csv','_rv.csv'), encoding = 'cp1252')
   except:
     f = open('data/' + filename, encoding = 'cp1252')
 
+  missing = 0
+
   for r in csv.DictReader(f):
     try:
-      schools[r['UNITID']][out_col] = r[in_col]
+      schools[r['UNITID']][out_col] = r[col]
     except KeyError:
+      missing += 1
       try:
         schools[r['UNITID']][out_col] = ''
       except KeyError:
         # School didn't exist in imported list
         pass
+
+  if missing:
+    print("%d missing values for %s" % (missing, out_col))
 
   f.close()
 
@@ -72,19 +80,12 @@ args = []
 for c in columns:
   if '{y}' in c[1]:
     for y in years:
-      name = "%s %s (%s)" % (c[0], y, c[2])
-      args.append((c[1].replace('{y}',y),c[0],name))
-      final_columns.append(name)
+      args.append((c[1].replace('{y}',y),c[0],y))
   elif '{ay}' in c[1]:
     for ay in academic_years:
-      name = "%s %s (%s)" % (c[0], ay, c[2])
-      args.append((c[1].replace('{ay}',ay),c[0],name))
-      final_columns.append(name)
+      args.append((c[1].replace('{ay}',ay),c[0],ay))
   else:
-    name = "%s latest (%s)" % (c[0], c[2])
-    args.append((c[1],c[0],name))
-    final_columns.append(name)
-    
+    args.append((c[1],c[0]))
 
 for a in args:
   append_column(*a)
@@ -99,14 +100,14 @@ with open('data/comparison-public.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '1':
+    if s.get('CONTROL') == '1':
       writer.writerow(s)
 
 with open('data/comparison-private-non-profit.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
-    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2':
+    if s.get('CONTROL') == '2':
       writer.writerow(s)
 
 with open('data/comparison-ny-pa-oh-bacc-ma.tsv', 'w') as f:
@@ -116,5 +117,5 @@ with open('data/comparison-ny-pa-oh-bacc-ma.tsv', 'w') as f:
     MA = ['18','19','20']
     BAC_AS = '21'
     BAC_DIV = '22'
-    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2' and s.get('C15BASIC latest (Carnegie Classification)') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR latest (State)') in ['NY','PA', 'OH']:
+    if s.get('CONTROL') == '2' and s.get('C15BASIC') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR') in ['NY','PA', 'OH']:
       writer.writerow(s)
