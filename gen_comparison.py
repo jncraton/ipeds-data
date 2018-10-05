@@ -109,12 +109,12 @@ with open('data/comparison-private-non-profit.tsv', 'w') as f:
     if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2':
       writer.writerow(s)
 
-with open('data/comparison-ny-pa-bacc-ma.tsv', 'w') as f:
+with open('data/comparison-ny-pa-oh-bacc-ma.tsv', 'w') as f:
   writer = csv.DictWriter(f, dialect='excel-tab', fieldnames=final_columns)
   writer.writeheader()
   for s in schools.values():
     MA = ['18','19','20']
     BAC_AS = '21'
     BAC_DIV = '22'
-    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2' and s.get('C15BASIC latest (Carnegie Classification)') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR latest (State)') in ['NY','PA']:
+    if s.get('CONTROL latest (Public/Non-profit/For-profit)') == '2' and s.get('C15BASIC latest (Carnegie Classification)') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR latest (State)') in ['NY','PA', 'OH']:
       writer.writerow(s)
