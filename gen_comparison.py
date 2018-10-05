@@ -119,3 +119,8 @@ with open('data/comparison-ny-pa-oh-bacc-ma.tsv', 'w') as f:
     BAC_DIV = '22'
     if s.get('CONTROL') == '2' and s.get('C15BASIC') in MA+[BAC_AS,BAC_DIV] and s.get('STABBR') in ['NY','PA', 'OH']:
       writer.writerow(s)
+
+with open('data/comparison_variables.txt','w') as vars:
+  for c in columns:
+    vars.write("%s from %s (%s)\n" % (c[0],c[1],c[2]))
+  
