@@ -13,5 +13,7 @@ for f in csvs:
   with open(lf,'r',encoding='cp1252') as fr:
     content = fr.read()
 
+  content = '\n'.join([l.strip() for l in content.splitlines()])
+
   with open(lf,'w',encoding='cp1252') as fw:
     fw.write(content.upper())
