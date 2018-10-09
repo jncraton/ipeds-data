@@ -18,6 +18,8 @@ columns = [
   ('SATMT25','adm{y}.csv','SAT Math 25th percentile'),
   ('SATVR75','adm{y}.csv','SAT Reading 75th percentile'),
   ('SATMT75','adm{y}.csv','SAT Math 75th percentile'),
+  ('RET_PCF','ef{y}d.csv','Retention Rate'),
+  ('STUFACR','ef{y}d.csv','Student Faculty Ratio'),
   ('FTEUG','efia{y}.csv','Undergraduate FTE'),
   ('FTEGD','efia{y}.csv','Graduate FTE'),
   ('SCUGFFN','sfa{ay}.csv','Total First-time, First-year Undergraduates'),
