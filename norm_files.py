@@ -1,3 +1,13 @@
+"""
+Normalizes contents for all data files.
+
+- Converts column names to uppercase
+- Converts data values to uppercase
+- Converts to Unix line endings
+- Removes trailing whitespace from all lines
+
+"""
+
 import os
 
 csvs = ['data/' + f for f in os.listdir('data') if f.endswith('.csv')]
