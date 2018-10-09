@@ -11,7 +11,7 @@ data/comparison.tsv: data/SAL2016_IS.zip data/SAL2016_IS_Dict.zip data/SAL2016_N
 	python3 norm_files.py
 	python3 gen_comparison.py
 
-y%: data/OM%.zip data/OM%_Dict.zip data/ADM%.zip data/ADM%_Dict.zip data/EF%A.zip data/EF%A_Dict.zip data/EF%B.zip data/EF%B_Dict.zip data/EF%C.zip data/EF%C_Dict.zip data/EF%D.zip data/EF%D_Dict.zip data/EAP%.zip data/EAP%_Dict.zip data/IC%.zip data/IC%_Dict.zip data/IC%_AY.zip data/IC%_AY_Dict.zip data/EFFY%.zip data/EFFY%_Dict.zip data/EFIA%.zip data/EFIA%_Dict.zip data/HD%.zip data/HD%_Dict.zip ;
+y%: data/GR%.zip data/GR%_Dict.zip data/OM%.zip data/OM%_Dict.zip data/ADM%.zip data/ADM%_Dict.zip data/EF%A.zip data/EF%A_Dict.zip data/EF%B.zip data/EF%B_Dict.zip data/EF%C.zip data/EF%C_Dict.zip data/EF%D.zip data/EF%D_Dict.zip data/EAP%.zip data/EAP%_Dict.zip data/IC%.zip data/IC%_Dict.zip data/IC%_AY.zip data/IC%_AY_Dict.zip data/EFFY%.zip data/EFFY%_Dict.zip data/EFIA%.zip data/EFIA%_Dict.zip data/HD%.zip data/HD%_Dict.zip ;
 
 py%: data/FLAGS%.zip data/FLAGS%_Dict.zip ;
 
