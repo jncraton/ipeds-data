@@ -68,7 +68,11 @@ def append_column(filename, col, by=None):
   try:
     f = open('data/' + filename.replace('.csv','_rv.csv'), encoding = 'cp1252')
   except:
-    f = open('data/' + filename, encoding = 'cp1252')
+    try:
+      f = open('data/' + filename, encoding = 'cp1252')
+    except:
+      print("File not found: %s" % filename)
+      return
 
   missing = 0
 
